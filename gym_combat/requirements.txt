@@ -12,17 +12,17 @@ pytz==2020.4
 six==1.15.0
 scikit-image
 attrs
-h5py==3.4.0
 keras==2.0.8
 protobuf>=3.0
 pydot-ng
 scipy
 semver
 gym[atari]
-tensorflow-gpu==1.14
 tensorflow==1.14.0
+tensorflow-gpu==1.14
+h5py #==3.4.0
 tqdm
 moviepy
 stable-baselines3
 pymap3d
-tensorboard==1.15.0
+tensorboard #==1.15.0

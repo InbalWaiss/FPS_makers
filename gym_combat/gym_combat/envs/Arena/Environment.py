@@ -85,15 +85,6 @@ class Environment(object):
         self.reset_players_positions(episode_number)
         self.win_status: WinEnum = WinEnum.NoWin
 
-    def reset_players_positions_for_VBS_DEMO(self, episode_number):
-        # for VBS_DEMO 13/1/2022 an agent was trained for 100 fixed start points
-        from fixed_start_positions_for_VBS_DEMO import start_positions
-        index = episode_number % 100
-        self.blue_player.h = start_positions[index][0]
-        self.blue_player.w = start_positions[index][1]
-        self.red_player.h = start_positions[index][2]
-        self.red_player.w = start_positions[index][3]
-
     def reset_players_positions(self, episode_number):
         legal_start_points = False
         while not legal_start_points:

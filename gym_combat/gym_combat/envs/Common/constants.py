@@ -3,7 +3,6 @@ from PIL import Image
 import numpy as np
 from os import path
 import pickle
-from gym_combat.gym_combat.envs.Common.Preprocessing.load_DSM_from_excel import get_DSM_berlin, get_DSM_Boston, get_DSM_Paris
 
 BASELINES_RUN = True
 SAVE_BERLIN_FIXED_STATE = False
@@ -30,84 +29,12 @@ STATS_RESULTS_RELATIVE_PATH = "statistics"
 RELATIVE_PATH_HUMAN_VS_MACHINE_DATA = path.join(MAIN_PATH, 'gym_combat/gym_combat/envsQtable/trained_agents')
 
 
-DSM_names = {"15X15", "100X100_Berlin", "100X100_Paris", "100X100_Boston", "Baqa", "Baqa_Thicken"}
-#DSM_name = "100X100_Berlin"
+DSM_names = {"Baqa", "Baqa_Thicken"}
 DSM_name = "Baqa_Thicken" #"Baqa"
 
 
 
-
-
-if DSM_name=="15X15":
-    DSM = np.array([
-        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-        [0., 1., 1., 0., 0., 0., 1., 0., 0., 0., 0., 0., 1., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 1., 1., 0., 0., 0., 0., 1., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 1., 0., 0.],
-        [0., 0., 0., 0., 1., 1., 1., 0., 0., 0., 0., 0., 1., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 1., 1., 1., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 0., 0., 1., 0., 0., 0., 0., 0., 0.],
-        [0., 1., 1., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1., 1., 1., 0.],
-        [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.],
-    ])
-    SIZE_W = 15
-    SIZE_H = 15
-    FIRE_RANGE = 7
-    MAX_STEPS_PER_EPISODE = 250
-    BB_STATE = False
-    CLOSE_START_POSITION = False
-    LOS_PENALTY_RANGE = 2 * FIRE_RANGE
-    BB_MARGIN = 0
-    SIZE_W_BB = SIZE_W
-    SIZE_H_BB = SIZE_H
-    MIN_PATH_DIST_FOR_START_POINTS = 2
-    all_pairs_distances_path = 'gym_combat/gym_combat/envs/Greedy/all_pairs_distances_' + DSM_name + '___' + '.pkl'
-    if path.exists(all_pairs_distances_path):
-        with open(all_pairs_distances_path, 'rb') as f:
-            all_pairs_distances = pickle.load(f)
-            print("all_pairs_distances loaded")
-
-elif DSM_name=="100X100_Berlin":
-
-    #DSM = get_DSM_berlin()
-    #np.savetxt("gym_combat/gym_combat/envs/Common/maps/Berlin/Berlin_1_256_inbal.txt", DSM, fmt="%d")
-
-    SIZE_H=100
-    SIZE_W=100
-    DSM = np.loadtxt("gym_combat/gym_combat/envs/Common/maps/Berlin_1_256.txt", dtype = np.uint8, usecols=range(SIZE_W))
-    if False:
-        import matplotlib.pyplot as plt
-        plt.matshow(DSM)
-        plt.show()
-
-    FIRE_RANGE = 10
-    LOS_PENALTY_RANGE = 3 * FIRE_RANGE
-    MAX_STEPS_PER_EPISODE = 100
-    MIN_PATH_DIST_FOR_START_POINTS = 2
-    BB_STATE = True
-    BB_MARGIN = 16
-
-    SIZE_W_BB = 4 * FIRE_RANGE + 2 * BB_MARGIN + 1
-    SIZE_H_BB = 4 * FIRE_RANGE + 2 * BB_MARGIN + 1
-    all_pairs_distances_path = 'gym_combat/gym_combat/envs/Greedy/all_pairs_distances_' + DSM_name + '___' + '.pkl'
-    if path.exists(all_pairs_distances_path):
-        with open(all_pairs_distances_path, 'rb') as f:
-            all_pairs_distances = pickle.load(f)
-            print("all_pairs_distances loaded")
-    all_pairs_shortest_path_path = 'gym_combat/gym_combat/envs/Greedy/all_pairs_shortest_path_100X100_Berlin_10.pkl'
-    if path.exists(all_pairs_shortest_path_path):
-        with open(all_pairs_shortest_path_path, 'rb') as f:
-            all_pairs_shortest_path = pickle.load(f)
-            print("all_pairs_shortest_path loaded")
-    SAVE_BERLIN_FIXED_STATE = False
-
-elif DSM_name=="Baqa":
+if DSM_name=="Baqa":
     SIZE_H = 100
     SIZE_W = 100
     DSM = np.loadtxt(path.join(COMMON_PATH, 'maps', 'BaqaObs.txt'), dtype=np.uint8, usecols=range(SIZE_W))
@@ -328,10 +255,7 @@ class AgentType(IntEnum):
     Greedy = 4
     Smart = 5
 
-Agent_type_str = {AgentType.Q_table : "Q_table",
-                  AgentType.DQN_basic : "DQN_basic",
-                  AgentType.DQN_keras : "DQN_keras",
-                  AgentType.Greedy : "Greedy_player",
+Agent_type_str = {AgentType.Greedy : "Greedy_player",
                   AgentType.Smart : "smart_player"}
 
 class Color(IntEnum):
